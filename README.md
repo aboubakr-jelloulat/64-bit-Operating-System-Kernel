@@ -1,57 +1,111 @@
-# Write Your Own 64-bit Operating System Kernel From Scratch
+# 64-bit OS Kernel
 
-This respository holds all the source code for [this YouTube tutorial series](https://www.youtube.com/playlist?list=PLZQftyCk7_SeZRitx5MjBKzTtvk0pHMtp).
+A minimal 64-bit operating system kernel built from scratch, designed for learning and experimentation. This project demonstrates fundamental OS concepts including boot loading, memory management, and kernel initialization.
 
-You can find the revision for a specific episode on [this page](https://github.com/davidcallanan/os-series/blob/master/REVISIONS.md).
+## ✨ Features
 
-Please make sure to [**select the revision corresponding to the episode you are working on**](https://github.com/davidcallanan/os-series/blob/master/REVISIONS.md). The code for each revision might not match the video content exactly, as some corrections and adjustments are made from time to time.
+- **Pure 64-bit Architecture**: Built specifically for x86_64 systems
+- **Bootable ISO**: Creates a complete bootable image
+- **Containerized Build**: Consistent development environment using Docker
+- **Cross-platform Development**: Works on Linux, macOS, and Windows
+- **Educational Focus**: Clean, documented code for learning OS development
 
-You can find pre-built ISO files for this kernel at [this repository](https://github.com/davidcallanan/os-series-isos).
+## 🚀 Quick Start
 
-Considering supporting this work via [my Patreon page](http://patreon.com/codepulse).
+For experienced users, run these commands in sequence:
 
-## Prerequisites
+```bash
+# Build and run the OS
+docker build buildenv -t myos-buildenv
+docker run --rm -it -v "$(pwd)":/root/env myos-buildenv make build-x86_64 && exit
+qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso
+```
 
- - A text editor such as [VS Code](https://code.visualstudio.com/).
- - [Docker](https://www.docker.com/) for creating our build-environment.
- - [Qemu](https://www.qemu.org/) for emulating our operating system.
-   - Remember to add Qemu to the path so that you can access it from your command-line. ([Windows instructions here](https://dev.to/whaleshark271/using-qemu-on-windows-10-home-edition-4062))
+## 📋 Prerequisites
 
-## Setup
+Before you begin, ensure you have the following installed:
 
-Build an image for our build-environment:
- - `docker build buildenv -t myos-buildenv`
+- **Docker** - [Download here](https://www.docker.com/get-started)
+- **QEMU** - Must be installed and added to your system PATH
+  - Linux: `sudo apt install qemu-system-x86` (Ubuntu/Debian) or equivalent
+  - macOS: `brew install qemu`
+  - Windows: Download from [QEMU website](https://www.qemu.org/download/)
+- **Terminal/Command Line Interface**
 
-## Build
+## 🔧 Build Instructions
 
-Enter build environment:
- - Linux or MacOS: `docker run --rm -it -v "$(pwd)":/root/env myos-buildenv`
- - Windows (CMD): `docker run --rm -it -v "%cd%":/root/env myos-buildenv`
- - Windows (PowerShell): `docker run --rm -it -v "${pwd}:/root/env" myos-buildenv`
- - Please use the linux command if you are using `WSL`, `msys2` or `git bash`
- - NOTE: If you are having trouble with an unshared drive, ensure your docker daemon has access to the drive you're development environment is in. For Docker Desktop, this is in "Settings > Shared Drives" or "Settings > Resources > File Sharing".
+### Step 1: Build the Docker Environment
 
-Build for x86 (other architectures may come in the future):
- - `make build-x86_64`
- - If you are using Qemu, please close it before running this command to prevent errors.
+```bash
+docker build buildenv -t myos-buildenv
+```
 
-To leave the build environment, enter `exit`.
+This creates a containerized build environment with all necessary tools and dependencies.
 
-## Emulate
+### Step 2: Enter the Build Environment
 
-You can emulate your operating system using [Qemu](https://www.qemu.org/): (Don't forget to [add qemu to your path](https://dev.to/whaleshark271/using-qemu-on-windows-10-home-edition-4062#:~:text=2.-,Add%20Qemu%20path%20to%20environment%20variables%20settings,-Copy%20the%20Qemu)!)
+Choose the command for your operating system:
 
- - `qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso`
- - Note: Close the emulator when finished, so as to not block writing to `kernel.iso` for future builds.
+**Linux / macOS / WSL / Git Bash:**
+```bash
+docker run --rm -it -v "$(pwd)":/root/env myos-buildenv
+```
 
-If the above command fails, try one of the following:
- - Windows: [`qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso -L "C:\Program Files\qemu"`](https://stackoverflow.com/questions/66266448/qemu-could-not-load-pc-bios-bios-256k-bin)
- - Linux: [`qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso -L /usr/share/qemu/`](https://unix.stackexchange.com/questions/134893/cannot-start-kvm-vm-because-missing-bios)
- - Alternatively, install a custom BIOS binary file and link it to Qemu using the `-L` option.
+**Windows Command Prompt:**
+```cmd
+docker run --rm -it -v "%cd%":/root/env myos-buildenv
+```
 
-Alternatively, you should be able to load the operating system on a USB drive and boot into it when you turn on your computer. (I haven't actually tested this yet.)
+**Windows PowerShell:**
+```powershell
+docker run --rm -it -v "${pwd}:/root/env" myos-buildenv
+```
 
-## Cleanup
+### Step 3: Build the Kernel
 
-Remove the build-evironment image:
- - `docker rmi myos-buildenv -f`
+Inside the Docker container, run:
+
+```bash
+make build-x86_64
+```
+
+This compiles the kernel and creates a bootable ISO image at `dist/x86_64/kernel.iso`.
+
+### Step 4: Exit the Container
+
+```bash
+exit
+```
+
+### Step 5: Run the OS
+
+**Important**: Run QEMU on your host system, not inside Docker.
+
+```bash
+qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso
+```
+
+Your custom OS should boot in a QEMU window!
+
+## 🧹 Cleanup
+
+To remove the Docker build image when you're done:
+
+```bash
+docker rmi myos-buildenv -f
+```
+
+### Customization
+
+- Modify kernel code in the `src/` directory
+- Rebuild with `make build-x86_64` inside Docker
+- Test changes by running the new ISO in QEMU
+
+## ⚠️ Troubleshooting
+
+**QEMU not found**: Ensure QEMU is installed and added to your system PATH.
+
+**Docker permission errors**: On Linux, you may need to run Docker commands with `sudo` or add your user to the docker group.
+
+**Build failures**: Make sure you're running the build command inside the Docker container, not on your host system.
+
