@@ -77,7 +77,7 @@ void handle_input(struct KeyboardEvent event) {
 void kernel_main() {
     print_clear();
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
-    print_str("Welcome to our 64-bit kernel!");
+    print_str("Hej This is BOB OS!");
     
     keyboard_init();
     keyboard_set_handler(handle_input);
