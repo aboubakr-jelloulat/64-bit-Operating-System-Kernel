@@ -2,7 +2,7 @@
 
 A minimal 64-bit operating system kernel built from scratch, designed for learning and experimentation. This project demonstrates fundamental OS concepts including boot loading, memory management, and kernel initialization.
 
-## ✨ Features
+##  Features
 
 - **Pure 64-bit Architecture**: Built specifically for x86_64 systems
 - **Bootable ISO**: Creates a complete bootable image
@@ -10,7 +10,7 @@ A minimal 64-bit operating system kernel built from scratch, designed for learni
 - **Cross-platform Development**: Works on Linux, macOS, and Windows
 - **Educational Focus**: Clean, documented code for learning OS development
 
-## 🚀 Quick Start
+##  Quick Start
 
 For experienced users, run these commands in sequence:
 
@@ -87,7 +87,7 @@ qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso
 
 Your custom OS should boot in a QEMU window!
 
-## 🧹 Cleanup
+##  Cleanup
 
 To remove the Docker build image when you're done:
 
@@ -101,7 +101,7 @@ docker rmi myos-buildenv -f
 - Rebuild with `make build-x86_64` inside Docker
 - Test changes by running the new ISO in QEMU
 
-## ⚠️ Troubleshooting
+##  Troubleshooting
 
 **QEMU not found**: Ensure QEMU is installed and added to your system PATH.
 
